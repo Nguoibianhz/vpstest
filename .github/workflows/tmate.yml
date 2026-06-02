@@ -34,7 +34,7 @@ jobs:
           gdown https://drive.google.com/uc?id=1Q2VYSvBdeclp6A1f8xePFrT6Yt7ZB2gX -O ovh.c
           gcc ovh.c -o ovhbypass
           npm install cluster colors colorama axios crypto discord.js gradient-string user-agents header-generator hpack socks puppeteer puppeteer-extra puppeteer-extra-plugin-stealth puppeteer-real-browser
-       
+          pip install beautifulsoup4 opencv-python numpy playwright psutil requests discord.py && playwright install
       - name: ⏳ Keep VPS alive
         run: |
           for i in $(seq 1 360); do
